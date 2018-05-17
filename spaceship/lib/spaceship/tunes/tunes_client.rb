@@ -615,7 +615,7 @@ module Spaceship
       data["educationalDiscount"] = availability.educational_discount
       data["preOrder"]["clearedForPreOrder"] = { "value" => cleared_for_preorder, "isEditable" => true, "isRequired" => true, "errorKeys" => nil }
       data["preOrder"]["appAvailableDate"] = { "value" => app_available_date, "isEditable" => true, "isRequired" => true, "errorKeys" => nil }
-      data["b2bUsers"] = availability.b2b_app_enabled ? availability.b2b_users.map { |user| { "value" => { "add" => user.add, "delete" => user.delete, "dsUsername" => user.ds_username } } } : []
+      data["b2bUsers"] = availability.b2b_app_enabled ? availability.b2b_users : []
 
       # send the changes back to Apple
       r = request(:post) do |req|

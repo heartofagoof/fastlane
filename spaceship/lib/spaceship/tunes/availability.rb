@@ -32,7 +32,8 @@ module Spaceship
         'theWorld' => :include_future_territories,
         'preOrder.clearedForPreOrder.value' => :cleared_for_preorder,
         'preOrder.appAvailableDate.value' => :app_available_date,
-        'b2BAppFlagDisabled' => :b2b_unavailable
+        'b2BAppFlagDisabled' => :b2b_unavailable,
+        'b2bAppEnabled' => :b2b_app_enabled
       )
 
       # Create a new object based on a set of territories.
@@ -81,10 +82,6 @@ module Spaceship
         @b2b_users ||= raw_data['b2bUsers'].map { |user| B2bUser.new(user) }
       end
 
-      def b2b_app_enabled
-        @b2b_app_enabled.nil? ? raw_data['b2bAppEnabled'] : @b2b_app_enabled
-      end
-
       def educational_discount
         @educational_discount.nil? ? raw_data['educationalDiscount'] : @educational_discount
       end
@@ -97,7 +94,7 @@ module Spaceship
       # Requires users to be added with `add_b2b_users` otherwise `update_availability` will error
       def enable_b2b_app!
         raise "Not possible to enable b2b on this app" if b2b_unavailable
-        @b2b_app_enabled = true
+        self.b2b_app_enabled = true
         # need to set the educational discount to false
         @educational_discount = false
         self
@@ -106,7 +103,7 @@ module Spaceship
       # Adds users for b2b enabled apps
       def add_b2b_users(user_list = [])
         raise "Cannot add b2b users if b2b is not enabled" unless b2b_app_enabled
-        @b2b_users = user_list.map do |user|
+        self.b2b_users = user_list.map do |user|
           B2bUser.from_username(user)
         end
         self
