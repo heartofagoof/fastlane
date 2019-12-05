@@ -51,6 +51,34 @@ module Spaceship
         beta_group_ids = beta_groups.map(&:id)
         return Spaceship::ConnectAPI.delete_beta_tester_from_beta_groups(beta_tester_id: id, beta_group_ids: beta_group_ids)
       end
+
+      def self.create_beta_tester(email: nil, first_name: nil, last_name: nil, group_ids: nil, build_ids: nil)
+        attribuets = {
+            email: email,
+            firstName: first_name,
+            lastName: last_name
+        }
+        relationships = {}
+        unless build_ids.nil? || build_ids.length < 1
+          build_ids_data = build_ids.map do |id|
+            {
+                id: id,
+                type: 'builds'
+            }
+          end
+          relationships['builds'] = build_ids_data
+        end
+        unless group_ids.nil? || group_ids.length < 1
+          group_ids_data = group_ids.map do |id|
+            {
+                id: id,
+                type: 'betaGroups'
+            }
+          end
+          relationships['betaGroups'] = group_ids_data
+        end
+        return Spaceship::ConnectAPI.create_beta_tester(attributes: attribuets, relationships: relationships)
+      end
     end
   end
 end

@@ -168,6 +168,17 @@ module Spaceship
         Client.instance.get("betaGroups", params)
       end
 
+      def create_beta_group(attributes: {}, relationships: {})
+        body = {
+            data: {
+                attributes: attributes,
+                relationships: relationships,
+                type: "betaGroups"
+            }
+        }
+        Client.instance.post("betaGroups", body)
+      end
+
       def add_beta_groups_to_build(build_id: nil, beta_group_ids: [])
         body = {
           data: beta_group_ids.map do |id|
@@ -242,6 +253,16 @@ module Spaceship
         }
 
         Client.instance.delete("betaTesters/#{beta_tester_id}/relationships/betaGroups", nil, body)
+      end
+
+      def create_beta_tester(attributes: attributes, relationships: relationships)
+        body = {
+            data: {
+                attributes: attributes,
+                relationships: relationships,
+                type: "bulkBetaTesterAssignments"
+            }
+        }
       end
 
       #

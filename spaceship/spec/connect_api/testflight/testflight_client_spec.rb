@@ -359,6 +359,10 @@ describe Spaceship::ConnectAPI::TestFlight::Client do
           }
         end
 
+        context 'create_beta_group' do
+
+        end
+
         it 'succeeds' do
           url = "#{path}/#{build_id}/relationships/betaGroups"
           req_mock = test_request_body(url, body)

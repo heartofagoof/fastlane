@@ -36,6 +36,23 @@ module Spaceship
       def post_bulk_beta_tester_assignments(beta_testers: nil)
         return Spaceship::ConnectAPI.post_bulk_beta_tester_assignments(beta_group_id: id, beta_testers: beta_testers)
       end
+
+      def create(app_id: nil, name: nil , publicLinkEnabled: nil, publicLinkLimit: nil, publicLinkLimitEnabled: nil )
+        attributes = {
+            name: name,
+        }
+        attributes[:publicLinkEnabled] = publicLinkEnabled unless publicLinkEnabled.nil?
+        attributes[:publicLinkLimit] = publicLinkLimit unless publicLinkLimit.nil?
+        attributes[:publicLinkLimitEnabled] = publicLinkLimitEnabled unless publicLinkLimitEnabled.nil?
+
+        relationships = {
+            app: {
+                id: app_id,
+                type: "app"
+            }
+        }
+        return Spaceship::ConnectAPI.create_beta_group(attributes: attributes, relationships: relationships)
+      end
     end
   end
 end
